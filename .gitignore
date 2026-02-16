@@ -1,0 +1,93 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+
+# Credentials
+config/google_credentials.json
+config/*_credentials.json
+*.key
+*.pem
+
+# Logs
+logs/
+*.log
+
+# Cache
+cache/
+*.cache
+.cache/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Test coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Scraped data (temporary)
+data/raw/
+data/temp/
+*.tmp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Playwright browsers
+.playwright/
+
+# spaCy models (can be large)
+models/
+*.spacy
+
+# Keep example files
+!.env.example
+!config/*.example
+!config/*.yaml.example

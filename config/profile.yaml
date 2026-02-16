@@ -1,0 +1,392 @@
+# Job Finder Profile - Dmitriy König
+# Generated from CV: Koenig_d_cv.pdf v1.0
+# Last updated: 2026-02-16
+
+# ============================================================================
+# SYSTEM PROFILE (Used by scoring engine)
+# ============================================================================
+
+name: "Dmitriy König"
+
+roles:
+  - "Full-Stack Engineer"
+  - "Full Stack Developer"
+  - "Software Engineer"
+  - "Platform Engineer"
+  - "Backend Engineer"
+  - ".NET Developer"
+  - "Backend Developer"
+  - "Frontend Engineer (React)"
+  - "Data Engineer"
+
+skills:
+  # Programming languages
+  languages:
+    - {name: "TypeScript", experience_years: 2, proficiency: "Advanced"}
+    - {name: "C#", experience_years: 3, proficiency: "Advanced"}
+    - {name: "Python", experience_years: 3, proficiency: "Advanced"}
+    - {name: "JavaScript", experience_years: 2, proficiency: "Advanced"}
+    - {name: "SQL", experience_years: 4, proficiency: "Advanced"}
+    - {name: "Java", experience_years: 1, proficiency: "Intermediate"}
+    - {name: "C++", experience_years: 1, proficiency: "Intermediate"}
+  
+  # Frameworks & libraries
+  frameworks:
+    - {name: "React", experience_years: 2}
+    - {name: ".NET", experience_years: 3}
+    - {name: "REST API", experience_years: 3}
+    - {name: "Zustand", experience_years: 1}
+    - {name: "OpenAPI", experience_years: 2}
+    - {name: "Swagger", experience_years: 2}
+  
+  # DevOps & Infrastructure
+  tools:
+    - {name: "Docker", experience_years: 2}
+    - {name: "Linux", experience_years: 2}
+    - {name: "Nginx", experience_years: 2}
+    - {name: "CI/CD", experience_years: 2}
+    - {name: "GitHub Actions", experience_years: 2}
+    - {name: "Git", experience_years: 4}
+    - {name: "PostgreSQL", experience_years: 3}
+    - {name: "MySQL", experience_years: 2}
+    - {name: "Power BI", experience_years: 1}
+    - {name: "Tableau", experience_years: 1}
+  
+  # Concepts & patterns
+  concepts:
+    - "REST API"
+    - "OAuth"
+    - "Authentication"
+    - "API Integration"
+    - "Microservices"
+    - "Payment Integration"
+    - "Data Pipelines"
+    - "ETL"
+    - "Web Scraping"
+    - "Data Analysis"
+    - "EDA"
+    - "CI/CD"
+    - "i18n"
+    - "SEO"
+    - "Performance Optimization"
+    - "UX"
+    - "Production Systems"
+
+preferences:
+  remote: "100% preferred"
+  contract_types:
+    - "Festanstellung"
+    - "Freelance"
+    - "Contract"
+    - "Projektvertrag"
+  locations:
+    - "Germany"
+    - "Deutschland"
+    - "Remote"
+  
+  min_score: 60  # Minimum score to include in results
+
+# Profile text for TF-IDF matching
+# Natural language summary of skills and experience
+profile_text: |
+  Full-Stack and Platform Engineer with hands-on production experience in remote startup environments.
+  Currently working at NeoXonline.com, building and stabilizing production platform with React, TypeScript,
+  and comprehensive API integrations.
+  
+  Strong expertise in frontend development using React and TypeScript with modern state management (Zustand).
+  Experienced in building robust REST API integrations, implementing OAuth and social login flows, and
+  handling complex authentication and authorization logic. Developed and secured payment integration flows
+  with Coinbase and USDT, including transaction polling and wallet functionality.
+  
+  Proficient in backend development with C# and .NET, as well as Python for data engineering and automation.
+  Solid understanding of SQL databases including PostgreSQL and MySQL. Experience with data processing,
+  ETL pipelines, web scraping, and data analysis.
+  
+  Platform and DevOps skills include Docker containerization, Linux system administration, Nginx configuration,
+  and CI/CD implementation with GitHub Actions. Deployed and maintained production environments with focus
+  on stability and reliability.
+  
+  Additional experience in data engineering and analytics: built custom Python scrapers with anti-blocking
+  strategies, automated data collection and cleaning pipelines, performed exploratory data analysis,
+  and created insights for product decisions. Familiar with Power BI and Tableau for BI reporting.
+  
+  Specialized in production system stability: analyzed and fixed race conditions, optimized performance,
+  improved user flows, and implemented SEO and internationalization (i18n) features.
+  
+  Looking for remote or flexible hybrid Full-Stack, Platform, or Backend positions in Germany where I can
+  contribute to building scalable, maintainable production systems using modern technologies like
+  React, TypeScript, .NET, Docker, and cloud platforms.
+  
+  Key strengths: API integrations, OAuth/authentication, payment systems, Docker/Linux deployment,
+  data pipelines, production stability, remote collaboration, startup experience.
+
+# ============================================================================
+# DETAILED CV DATA (For reference and future enhancements)
+# ============================================================================
+
+cv:
+  meta:
+    version: "1.0"
+    source: "Koenig_d_cv.pdf"
+    updated_from_pdf: true
+
+  identity:
+    name: "Dmitriy König"
+    title: "Full-Stack / Platform Engineer"
+    tagline: "Product-focused · Data-aware"
+    location:
+      city: "Laufenburg"
+      postal_code: "79725"
+      country: "Germany"
+    contacts:
+      phone: "+49 176 21127239"
+      email: "dmitriy.konig@gmail.com"
+      github: "https://github.com/DmtiriyK"
+      linkedin: "https://linkedin.com/in/dmitriykoenig"
+
+  languages:
+    - language: "German"
+      level: "C1"
+    - language: "English"
+      level: "B1"
+    - language: "Russian"
+      level: "Native"
+
+  summary:
+    - "Full-Stack / Platform Engineer with experience in production startup systems and fully remote teams."
+    - "Builds and stabilizes systems end-to-end: API integrations, React/TypeScript frontends, deployment on Linux/Docker/Nginx."
+    - "Focus on stable architecture, clean integrations, and maintainable code for real production environments."
+
+  role_targets:
+    primary:
+      - "Full-Stack Engineer"
+      - "Software Engineer"
+      - "Platform Engineer"
+      - "Backend Engineer (.NET)"
+    secondary:
+      - "Frontend Engineer (React/TS)"
+      - "Automation Engineer"
+      - "Data Engineering / Analytics (hybrid)"
+    contract_types:
+      - "Festanstellung"
+      - "Freelance"
+      - "Contract / Project"
+    work_mode:
+      preferred: "Remote"
+      acceptable: "Hybrid (if flexible)"
+    geography:
+      - "Germany (nationwide, remote-first)"
+
+  skills:
+    frontend_engineering:
+      core:
+        - "TypeScript"
+        - "React"
+        - "Zustand"
+      integration:
+        - "REST"
+        - "OpenAPI/Swagger"
+    backend_api_engineering:
+      core:
+        - "C#"
+        - "REST APIs"
+        - "SQL"
+      additional_languages:
+        - "Java"
+        - "C++"
+        - "Python"
+    platform_devops:
+      core:
+        - "Docker"
+        - "Linux"
+        - "Nginx"
+        - "CI/CD (GitHub Actions)"
+    data_storage_understanding:
+      databases:
+        - "PostgreSQL"
+        - "MySQL"
+      analytics_tools:
+        - "Power BI"
+        - "Tableau"
+      concepts:
+        - "EDA"
+
+  experience:
+    - company: "NeoXonline.com (UG)"
+      role: "Full-Stack / Platform Engineer"
+      location: "Cologne (remote)"
+      start: "2025-11"
+      end: "present"
+      type: "Remote / Startup / Production"
+      highlights:
+        - "Stabilized and refactored frontend architecture and API integrations in a production platform (video, channel, user flows)."
+        - "Developed and secured core functions: upload/edit, search, interactions, delete logic; analyzed/fixed race conditions."
+        - "Integrated payment & wallet flows (Coinbase, USDT): transaction polling, auth/token logic (OAuth/social login), access control."
+        - "Shared responsibility for production environment (Linux, Docker, Nginx, CI/CD), plus i18n and SEO improvements."
+      keywords:
+        - "React"
+        - "TypeScript"
+        - "API integration"
+        - "OAuth"
+        - "Docker"
+        - "Linux"
+        - "Nginx"
+        - "GitHub Actions"
+        - "Payments"
+        - "Race conditions"
+        - "i18n"
+        - "SEO"
+
+    - company: "GfW Schleiden"
+      role: "AI Chatbot – UX & Performance"
+      location: "Schleiden (remote)"
+      start: "2025-11"
+      end: "2026-01"
+      type: "Remote"
+      highlights:
+        - "Optimized AI-based chatbot functions focusing on UX, performance and system behavior."
+        - "Analyzed and improved user flows; independently extended system behavior."
+      keywords:
+        - "UX"
+        - "Performance"
+        - "AI features"
+
+    - company: "I.C.H."
+      role: "Data Collection & Automation Engineering – Market Research"
+      location: "Berlin (remote)"
+      start: "2025-11"
+      end: "2026-01"
+      type: "Remote"
+      highlights:
+        - "Built custom Python scrapers and data collection pipelines."
+        - "Implemented anti-blocking and request rotation strategies."
+        - "Automated data cleaning and normalization workflows."
+        - "Built structured datasets for market analysis and BI reporting."
+      keywords:
+        - "Python"
+        - "Scraping"
+        - "Pipelines"
+        - "Data cleaning"
+        - "Normalization"
+        - "BI"
+
+    - company: "Anima.help"
+      role: "Python-Based Data Analysis & Insights"
+      location: "Vienna (remote)"
+      start: "2025-10"
+      end: "2025-12"
+      type: "Remote"
+      highlights:
+        - "Performed exploratory data analysis and pattern discovery."
+        - "Automated data processing with advanced Python workflows."
+        - "Identified behavioral trends and usage patterns; generated insights for product decisions."
+      keywords:
+        - "Python"
+        - "EDA"
+        - "Product analytics"
+
+    - company: "Finanzamt Karaganda"
+      role: "Data Engineer – Datenverarbeitung"
+      location: "Karaganda (on-site)"
+      start: "2019-12"
+      end: "2021-01"
+      type: "On-site / Data processing"
+      highlights:
+        - "Processed and validated 1200+ tax documents daily."
+        - "Optimized internal data processes; created structured error and quality reports."
+      keywords:
+        - "Data processing"
+        - "Validation"
+        - "Quality reporting"
+
+    - company: "Integration & Spracherwerb"
+      role: "Integration / language & professional preparation"
+      location: "Germany"
+      start: "2021-11"
+      end: "2024-09"
+      type: "Integration period"
+      highlights:
+        - "Intensive language and professional integration toward entry into IT."
+        - "Parallel practical activities (FSJ Caritas, kickboxing trainer, childcare) supporting social/professional integration."
+      keywords:
+        - "German C1"
+        - "Integration"
+
+  education:
+    - institution: "IT Career Hub GmbH (AZAV)"
+      program: "Data Analyst"
+      start: "2025-01"
+      end: "2026-02"
+      details:
+        hours: 1124
+        profession_classification: "43353"
+        focus:
+          - "Python for Data Analysis"
+          - "SQL & Databases"
+          - "Power BI / Tableau"
+          - "Product Analytics"
+          - "Algorithms & Data Structures"
+          - "AI tools"
+          - "Practical project"
+    - institution: "Vocational School (Kazakhstan)"
+      program: "Fachinformatik"
+      start: "2018-09"
+      end: "2021-09"
+      focus:
+        - "Programming (Python/C#)"
+        - "Databases (SQL)"
+        - "Networks"
+        - "System architecture & computer engineering"
+
+  search_profile:
+    # Keywords for scraper/scorer optimization
+    keywords_positive:
+      roles:
+        - "fullstack"
+        - "full-stack"
+        - "software engineer"
+        - "backend"
+        - "platform"
+        - ".net"
+        - "c#"
+        - "react"
+        - "typescript"
+      tech:
+        - "docker"
+        - "linux"
+        - "nginx"
+        - "github actions"
+        - "ci/cd"
+        - "rest"
+        - "openapi"
+        - "oauth"
+        - "auth"
+        - "postgresql"
+        - "mysql"
+        - "python"
+        - "etl"
+        - "scraping"
+    keywords_negative:
+      tech:
+        - "sap"
+        - "abap"
+        - "cobol"
+        - "jsf"
+      onsite_terms:
+        - "vor ort erforderlich"
+        - "5 tage vor ort"
+        - "100% vor ort"
+    remote_terms:
+      strong:
+        - "100% remote"
+        - "fully remote"
+        - "remote möglich"
+        - "home office 100%"
+      weak:
+        - "hybrid"
+        - "mobile office"
+        - "home office möglich"
+
+  notes:
+    - "CV indicates strong production full-stack + platform responsibilities, plus data automation and analytics."
+    - "Primary selling points: remote experience, production stability, API integrations, payments/auth, Docker/Linux."

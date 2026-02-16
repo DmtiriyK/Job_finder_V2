@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Remote OK - Remote Jobs</title>
+    <link>https://remoteok.com/</link>
+    <description>Remote jobs for developers, designers and more</description>
+    <language>en-us</language>
+    
+    <item>
+      <title>TestCorp: Senior Full Stack Developer</title>
+      <link>https://remoteok.com/remote-jobs/12345-senior-full-stack-developer</link>
+      <guid>https://remoteok.com/remote-jobs/12345-senior-full-stack-developer</guid>
+      <pubDate>Mon, 16 Feb 2026 10:00:00 GMT</pubDate>
+      <description><![CDATA[
+        <p>We are looking for a Senior Full Stack Developer to join our team.</p>
+        <p><strong>Requirements:</strong></p>
+        <ul>
+          <li>5+ years experience with C# and .NET</li>
+          <li>Experience with React</li>
+          <li>Strong problem-solving skills</li>
+        </ul>
+        <p><strong>Salary:</strong> $80,000 - $120,000</p>
+      ]]></description>
+      <category>C#</category>
+      <category>.NET</category>
+      <category>React</category>
+      <category>Full Stack</category>
+    </item>
+    
+    <item>
+      <title>DevHouse: Backend Python Engineer</title>
+      <link>https://remoteok.com/remote-jobs/23456-backend-python-engineer</link>
+      <guid>https://remoteok.com/remote-jobs/23456-backend-python-engineer</guid>
+      <pubDate>Sun, 15 Feb 2026 14:30:00 GMT</pubDate>
+      <description><![CDATA[
+        <p>Join our backend team working on microservices.</p>
+        <p><strong>Requirements:</strong></p>
+        <ul>
+          <li>3+ years Python experience</li>
+          <li>Experience with Django or FastAPI</li>
+          <li>Knowledge of Docker and Kubernetes</li>
+        </ul>
+      ]]></description>
+      <category>Python</category>
+      <category>Django</category>
+      <category>Docker</category>
+      <category>Backend</category>
+    </item>
+    
+    <item>
+      <title>Frontend Masters: React Developer</title>
+      <link>https://remoteok.com/remote-jobs/34567-react-developer</link>
+      <guid>https://remoteok.com/remote-jobs/34567-react-developer</guid>
+      <pubDate>Sat, 14 Feb 2026 09:15:00 GMT</pubDate>
+      <description><![CDATA[
+        <p>We're hiring a React Developer for our web application.</p>
+        <p><strong>Tech Stack:</strong> React, TypeScript, Next.js, Tailwind CSS</p>
+        <p><strong>Salary:</strong> $60,000 - $90,000</p>
+      ]]></description>
+      <category>React</category>
+      <category>TypeScript</category>
+      <category>Next.js</category>
+      <category>Frontend</category>
+    </item>
+    
+  </channel>
+</rss>

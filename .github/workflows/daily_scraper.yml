@@ -1,0 +1,146 @@
+name: Daily Job Scraper
+
+on:
+  # Scheduled run at 09:00 CET (08:00 UTC) every day
+  schedule:
+    - cron: '0 8 * * *'
+  
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      top_n:
+        description: 'Number of top jobs to export'
+        required: false
+        default: '20'
+      scrapers:
+        description: 'Comma-separated scraper names (e.g. remoteok,weworkremotely)'
+        required: false
+        default: 'remoteok,weworkremotely,hackernews'
+
+jobs:
+  scrape-jobs:
+    name: Scrape and Export Jobs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      # =====================================================
+      # 1. Checkout repository
+      # =====================================================
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # =====================================================
+      # 2. Setup Python with pip caching
+      # =====================================================
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: 'requirements-full.txt'
+      
+      # =====================================================
+      # 3. Install Python dependencies
+      # =====================================================
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-full.txt
+      
+      # =====================================================
+      # 4. Cache Playwright browsers
+      # =====================================================
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('requirements-full.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+      
+      # =====================================================
+      # 5. Install Playwright browsers (if not cached)
+      # =====================================================
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: |
+          playwright install chromium
+          playwright install-deps chromium
+      
+      - name: Install Playwright dependencies only
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: |
+          playwright install-deps chromium
+      
+      # =====================================================
+      # 6. Setup Google Sheets credentials
+      # =====================================================
+      - name: Setup Google Sheets credentials
+        env:
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+        run: |
+          echo "$GOOGLE_CREDENTIALS_JSON" > config/google_credentials.json
+          echo "✅ Google Sheets credentials configured"
+      
+      # =====================================================
+      # 7. Run Job Scraper
+      # =====================================================
+      - name: Run Job Scraper
+        env:
+          PYTHONUNBUFFERED: "1"
+          LOG_LEVEL: "INFO"
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            # Manual run with custom parameters
+            TOP_N="${{ github.event.inputs.top_n }}"
+            SCRAPERS="${{ github.event.inputs.scrapers }}"
+            
+            if [ -n "$SCRAPERS" ]; then
+              python main.py --export-sheets --top-n "$TOP_N" --scrapers "$SCRAPERS"
+            else
+              python main.py --export-sheets --top-n "$TOP_N"
+            fi
+          else
+            # Scheduled run with default scrapers
+            python main.py --export-sheets --top-n 20 --scrapers remoteok,weworkremotely,hackernews
+          fi
+      
+      # =====================================================
+      # 8. Upload logs as artifact (always, even on failure)
+      # =====================================================
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-scraper-logs-${{ github.run_number }}
+          path: logs/
+          retention-days: 30
+          if-no-files-found: warn
+      
+      # =====================================================
+      # 9. Clean up credentials (security)
+      # =====================================================
+      - name: Clean up credentials
+        if: always()
+        run: |
+          rm -f config/google_credentials.json
+          echo "✅ Credentials cleaned up"
+      
+      # =====================================================
+      # 10. Summary
+      # =====================================================
+      - name: Create job summary
+        if: success()
+        run: |
+          echo "## ✅ Job Scraper Completed Successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Run Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Date**: $(date +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Duration**: See job runtime above" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Check Results" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Jobs exported to Google Sheets" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Logs uploaded to artifacts" >> $GITHUB_STEP_SUMMARY

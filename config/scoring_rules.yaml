@@ -1,0 +1,156 @@
+# Scoring configuration - Max points per component
+# Total = 100 points (sum of all max_points)
+scoring:
+  max_points:
+    tfidf_similarity: 40
+    tech_stack: 30
+    remote_type: 15
+    keywords: 10
+    contract_type: 5
+
+# Tech stack scoring rules
+tech_stack:
+  high_priority:
+    - {term: "C#", score: 5}
+    - {term: ".NET", score: 5}
+    - {term: ".NET Core", score: 5}
+    - {term: "ASP.NET", score: 5}
+    - {term: "React", score: 5}
+    - {term: "TypeScript", score: 4}
+    - {term: "Docker", score: 4}
+    - {term: "Microservices", score: 4}
+    - {term: "REST API", score: 4}
+    - {term: "API Integration", score: 4}
+    - {term: "OAuth", score: 3}
+    - {term: "AWS", score: 3}
+    - {term: "Azure", score: 3}
+    - {term: "CI/CD", score: 3}
+    - {term: "PostgreSQL", score: 3}
+    - {term: "MySQL", score: 3}
+    - {term: "Git", score: 2}
+  
+  medium_priority:
+    - {term: "Node.js", score: 2}
+    - {term: "Next.js", score: 2}
+    - {term: "Kubernetes", score: 2}
+    - {term: "Event-driven", score: 2}
+    - {term: "NoSQL", score: 1}
+    - {term: "GraphQL", score: 1}
+    - {term: "Redis", score: 1}
+    - {term: "RabbitMQ", score: 1}
+    - {term: "Clean Architecture", score: 1}
+    - {term: "DDD", score: 1}
+    - {term: "SOLID", score: 1}
+    - {term: "Testing", score: 1}
+    - {term: "xUnit", score: 1}
+    - {term: "Jest", score: 1}
+  
+  negative:
+    - {term: "SAP", score: -3}
+    - {term: "ABAP", score: -3}
+    - {term: "JSF", score: -3}
+    - {term: "COBOL", score: -3}
+
+# Remote type scoring
+remote:
+  patterns:
+    full_remote:
+      score: 5
+      patterns:
+        - "100% remote"
+        - "fully remote"
+        - "full remote"
+        - "remote work"
+        - "remote innerhalb Deutschland"
+        - "remote innerhalb Deutschlands"
+        - "vollständig remote"
+        - "komplett remote"
+    
+    hybrid_1day:
+      score: 3
+      patterns:
+        - "1 Tag.*Woche"
+        - "1 day.*week"
+        - "hybrid.*1.*Tag"
+        - "ein Tag.*Büro"
+    
+    hybrid_2days:
+      score: 0
+      patterns:
+        - "2 Tage.*Woche"
+        - "2 days.*week"
+    
+    onsite_required:
+      score: -3
+      patterns:
+        - "vor Ort"
+        - "Standortpflicht"
+        - "onsite only"
+        - "zwingend vor Ort"
+        - "3-5 Tage.*vor Ort"
+
+# Keywords scoring
+keywords:
+  urgency:
+    - {term: "sofort", score: 2}
+    - {term: "asap", score: 2}
+    - {term: "kurzfristig", score: 2}
+    - {term: "Projektstart", score: 2}
+    - {term: "dringend", score: 1}
+  
+  positive:
+    - {term: "wachsendes Team", score: 1}
+    - {term: "remote-first", score: 2}
+    - {term: "flexible Arbeitszeiten", score: 1}
+    - {term: "moderne Technologien", score: 1}
+  
+  negative:
+    - {term: "vor Ort", score: -2}
+    - {term: "Onsite only", score: -5}
+    - {term: "3-5 Tage vor Ort", score: -3}
+
+# Contract type scoring
+contract:
+  types:
+    - {name: "Freiberuflich", score: 2}
+    - {name: "Contract", score: 2}
+    - {name: "Projektvertrag", score: 2}
+    - {name: "Interim", score: 2}
+    - {name: "Unbefristet", score: 1}
+    - {name: "Festanstellung", score: 1}
+    - {name: "Befristet", score: 0}
+    - {name: "Praktikum", score: -5}
+    - {name: "Junior", score: -2}
+
+# Filtering rules (pre-scoring)
+filters:
+  locations:
+    include:
+      - "Germany"
+      - "Deutschland"
+      - "Remote"
+      - "Berlin"
+      - "München"
+      - "Hamburg"
+      - "Frankfurt"
+      - "Köln"
+  
+  min_description_length: 50
+  max_job_age_days: 7
+  
+  role_keywords:
+    primary:
+      - "Fullstack Developer"
+      - "Full-Stack Engineer"
+      - "Software Engineer"
+      - "Backend Developer"
+      - "Platform Engineer"
+      - "Web Developer"
+    
+    secondary:
+      - "Cloud Engineer"
+      - "Application Developer"
+      - ".NET Developer"
+      - "React Developer"
+      - "API Developer"
+      - "Systems Engineer"

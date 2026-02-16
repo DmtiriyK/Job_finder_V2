@@ -1,0 +1,174 @@
+{
+  "languages": [
+    "C#", "C Sharp", ".NET", ".NET Core", ".NET Framework", "ASP.NET", "ASP.NET Core",
+    "Python", "TypeScript", "JavaScript", "Java", "Kotlin", "Scala", "Go", "Golang", "Rust",
+    "C++", "C", "Ruby", "PHP", "Swift", "Objective-C", "Dart", "Elixir", "Erlang", "Haskell",
+    "Clojure", "F#", "VB.NET", "Visual Basic", "R", "MATLAB", "Perl", "Shell", "Bash", "PowerShell",
+    "SQL", "T-SQL", "PL/SQL", "HTML", "CSS", "SCSS", "SASS", "Less"
+  ],
+  
+  "frameworks": [
+    "React", "React.js", "Next.js", "Vue", "Vue.js", "Angular", "AngularJS", "Svelte", "Ember",
+    "Node.js", "Express", "Express.js", "NestJS", "Fastify", "Koa", "Hapi",
+    ".NET", ".NET Core", "ASP.NET", "ASP.NET Core", "Entity Framework", "EF Core", "SignalR",
+    "Spring", "Spring Boot", "Hibernate", "Jakarta EE", "JavaFX", "Micronaut", "Quarkus",
+    "Django", "Flask", "FastAPI", "Tornado", "Pyramid", "Celery", "aiohttp",
+    "Ruby on Rails", "Rails", "Sinatra",
+    "Laravel", "Symfony", "CodeIgniter", "Yii", "CakePHP",
+    "Blazor", "Xamarin", "MAUI", "WPF", "WinForms", "Unity", "Unreal Engine",
+    "React Native", "Flutter", "Ionic", "Cordova", "Electron",
+    "TensorFlow", "PyTorch", "Keras", "scikit-learn", "Pandas", "NumPy", "OpenCV"
+  ],
+  
+  "databases": [
+    "PostgreSQL", "MySQL", "SQL Server", "MSSQL", "Oracle", "Oracle DB", "SQLite",
+    "MongoDB", "Cassandra", "CouchDB", "Couchbase", "Redis", "Memcached",
+    "Elasticsearch", "Solr", "Neo4j", "ArangoDB", "InfluxDB", "TimescaleDB",
+    "DynamoDB", "Firestore", "Firebase", "Realm", "RocksDB", "LevelDB",
+    "MariaDB", "Percona", "CockroachDB", "YugabyteDB", "TiDB", "VoltDB"
+  ],
+  
+  "cloud": [
+    "AWS", "Amazon Web Services", "EC2", "S3", "Lambda", "ECS", "EKS", "RDS", "DynamoDB", "CloudFormation",
+    "Azure", "Microsoft Azure", "Azure Functions", "Azure DevOps", "Azure AD", "Azure SQL", "Cosmos DB",
+    "GCP", "Google Cloud", "Google Cloud Platform", "App Engine", "Cloud Functions", "BigQuery", "Cloud Storage",
+    "IBM Cloud", "Oracle Cloud", "Alibaba Cloud", "Tencent Cloud", "DigitalOcean", "Linode", "Vultr", "Hetzner",
+    "Heroku", "Vercel", "Netlify", "Railway", "Render", "Fly.io", "Cloudflare", "Cloudflare Workers"
+  ],
+  
+  "devops": [
+    "Docker", "Kubernetes", "K8s", "OpenShift", "Rancher", "Nomad", "Mesos",
+    "Jenkins", "GitLab CI", "GitHub Actions", "CircleCI", "Travis CI", "TeamCity", "Bamboo",
+    "Terraform", "Ansible", "Puppet", "Chef", "Salt", "CloudFormation", "Pulumi",
+    "Prometheus", "Grafana", "ELK", "Elasticsearch", "Logstash", "Kibana", "Datadog", "New Relic",
+    "Splunk", "Nagios", "Zabbix", "Jaeger", "OpenTelemetry", "Sentry",
+    "Git", "GitHub", "GitLab", "Bitbucket", "Mercurial", "SVN", "Perforce",
+    "Nginx", "Apache", "HAProxy", "Traefik", "Envoy", "Istio", "Linkerd",
+    "Vagrant", "Packer", "Consul", "Vault", "etcd", "Helm", "ArgoCD", "Flux"
+  ],
+  
+  "tools": [
+    "VS Code", "Visual Studio", "IntelliJ IDEA", "PyCharm", "WebStorm", "Rider",
+    "Eclipse", "NetBeans", "Atom", "Sublime Text", "Vim", "Emacs", "NeoVim",
+    "Postman", "Insomnia", "Swagger", "OpenAPI", "Redoc",
+    "Jira", "Confluence", "Trello", "Asana", "Monday.com", "Linear",
+    "Slack", "Microsoft Teams", "Discord", "Zoom", "Meet",
+    "Figma", "Sketch", "Adobe XD", "InVision", "Zeplin",
+    "Webpack", "Vite", "Rollup", "Parcel", "esbuild", "Turbopack",
+    "npm", "yarn", "pnpm", "pip", "poetry", "conda", "Maven", "Gradle", "NuGet",
+    "ESLint", "Prettier", "Stylelint", "Black", "Flake8", "Pylint", "SonarQube",
+    "Jest", "Mocha", "Jasmine", "Cypress", "Playwright", "Selenium", "Puppeteer",
+    "xUnit", "NUnit", "MSTest", "JUnit", "TestNG", "pytest", "unittest", "RSpec"
+  ],
+  
+  "architecture": [
+    "Microservices", "Monolith", "Service-Oriented Architecture", "SOA", "Event-driven",
+    "CQRS", "Event Sourcing", "Saga Pattern", "Domain-Driven Design", "DDD",
+    "Clean Architecture", "Hexagonal Architecture", "Onion Architecture", "Layered Architecture",
+    "RESTful", "REST API", "API", "GraphQL", "gRPC", "WebSocket", "WebRTC", "Server-Sent Events", "SSE",
+    "OAuth", "OAuth2", "OpenID Connect", "SAML", "JWT", "JSON Web Token",
+    "API Gateway", "Service Mesh", "Message Queue", "Pub/Sub", "Message Broker",
+    "Load Balancing", "Reverse Proxy", "CDN", "Content Delivery Network",
+    "Serverless", "FaaS", "BaaS", "PaaS", "IaaS", "SaaS",
+    "Multi-tenancy", "Sharding", "Replication", "Caching", "Rate Limiting"
+  ],
+  
+  "messaging": [
+    "RabbitMQ", "Apache Kafka", "Kafka", "ActiveMQ", "NATS", "MQTT", "ZeroMQ",
+    "AWS SQS", "AWS SNS", "Azure Service Bus", "Azure Event Hubs", "Google Pub/Sub",
+    "Redis Streams", "Pulsar", "Amazon Kinesis"
+  ],
+  
+  "testing": [
+    "Unit Testing", "Integration Testing", "E2E Testing", "Test-Driven Development", "TDD",
+    "Behavior-Driven Development", "BDD", "Acceptance Testing", "Regression Testing",
+    "Load Testing", "Performance Testing", "Stress Testing", "Security Testing", "Penetration Testing",
+    "A/B Testing", "Smoke Testing", "Sanity Testing", "Canary Testing", "Blue-Green Deployment",
+    "Mocking", "Stubbing", "Dependency Injection", "CI/CD", "Continuous Integration", "Continuous Deployment"
+  ],
+  
+  "methodologies": [
+    "Agile", "Scrum", "Kanban", "Lean", "XP", "Extreme Programming", "Waterfall",
+    "DevOps", "GitOps", "SRE", "Site Reliability Engineering", "FinOps",
+    "Pair Programming", "Code Review", "Mob Programming", "Sprint Planning",
+    "Stand-up", "Daily Standup", "Retrospective", "Sprint Review"
+  ],
+  
+  "patterns": [
+    "Singleton", "Factory", "Abstract Factory", "Builder", "Prototype", "Adapter",
+    "Bridge", "Composite", "Decorator", "Facade", "Flyweight", "Proxy",
+    "Chain of Responsibility", "Command", "Iterator", "Mediator", "Memento",
+    "Observer", "State", "Strategy", "Template Method", "Visitor",
+    "Repository Pattern", "Unit of Work", "Dependency Injection", "Service Locator",
+    "SOLID", "DRY", "KISS", "YAGNI", "Single Responsibility", "Open/Closed",
+    "Liskov Substitution", "Interface Segregation", "Dependency Inversion"
+  ],
+  
+  "security": [
+    "Authentication", "Authorization", "OAuth", "OAuth2", "OpenID Connect", "SAML", "LDAP",
+    "JWT", "JSON Web Token", "SSL", "TLS", "HTTPS", "Encryption", "Hashing", "Bcrypt",
+    "OWASP", "SQL Injection", "XSS", "CSRF", "CORS", "CSP", "Content Security Policy",
+    "Firewall", "WAF", "Web Application Firewall", "VPN", "Zero Trust", "MFA",
+    "Multi-Factor Authentication", "2FA", "Two-Factor Authentication", "RBAC", "Role-Based Access Control",
+    "IAM", "Identity and Access Management", "Secret Management", "Vault", "Key Management"
+  ],
+  
+  "frontend": [
+    "HTML5", "CSS3", "Responsive Design", "Mobile-First", "Progressive Web App", "PWA",
+    "Single Page Application", "SPA", "Server-Side Rendering", "SSR", "Static Site Generation", "SSG",
+    "Tailwind CSS", "Bootstrap", "Material-UI", "Ant Design", "Chakra UI", "Styled Components",
+    "CSS Modules", "CSS-in-JS", "BEM", "SMACSS", "Atomic Design",
+    "Webpack", "Vite", "Rollup", "Parcel", "esbuild", "Babel", "TypeScript",
+    "State Management", "Redux", "MobX", "Zustand", "Recoil", "Jotai", "Pinia", "Vuex",
+    "React Hooks", "Context API", "React Router", "Next.js", "Gatsby", "Remix",
+    "Web Components", "Shadow DOM", "Custom Elements", "Lit", "Stencil",
+    "Accessibility", "ARIA", "WCAG", "a11y", "SEO", "Semantic HTML"
+  ],
+  
+  "backend": [
+    "API Development", "REST API", "RESTful API", "GraphQL", "gRPC", "WebSocket",
+    "Microservices", "Monolith", "Serverless", "Lambda Functions", "Cloud Functions",
+    "Authentication", "Authorization", "Session Management", "Caching", "Rate Limiting",
+    "Load Balancing", "Horizontal Scaling", "Vertical Scaling", "Database Design",
+    "ORM", "Object-Relational Mapping", "Query Optimization", "Indexing", "Database Migration",
+    "Background Jobs", "Queue Processing", "Cron Jobs", "Task Scheduling",
+    "Logging", "Monitoring", "Observability", "Distributed Tracing", "APM",
+    "API Gateway", "Service Discovery", "Circuit Breaker", "Retry Pattern", "Bulkhead Pattern"
+  ],
+  
+  "data": [
+    "Data Engineering", "Data Science", "Machine Learning", "ML", "Deep Learning", "AI",
+    "Artificial Intelligence", "Natural Language Processing", "NLP", "Computer Vision",
+    "ETL", "Extract Transform Load", "Data Pipeline", "Data Warehouse", "Data Lake",
+    "Big Data", "Hadoop", "Spark", "Apache Spark", "Flink", "Storm", "Airflow",
+    "dbt", "Data Build Tool", "Fivetran", "Stitch", "Talend", "Informatica",
+    "Data Visualization", "BI", "Business Intelligence", "Tableau", "Power BI", "Looker", "Metabase",
+    "Data Modeling", "Dimensional Modeling", "Star Schema", "Snowflake Schema", "Data Vault",
+    "Stream Processing", "Batch Processing", "Real-time Analytics", "OLAP", "OLTP",
+    "Feature Engineering", "Model Training", "Model Deployment", "MLOps", "AutoML"
+  ],
+  
+  "mobile": [
+    "iOS", "Android", "React Native", "Flutter", "Xamarin", "Ionic", "Cordova",
+    "Swift", "SwiftUI", "Objective-C", "Kotlin", "Java", "Dart",
+    "Mobile-First", "Responsive Design", "Cross-Platform", "Native Development",
+    "App Store", "Google Play", "TestFlight", "Firebase", "Push Notifications",
+    "Mobile Analytics", "Crashlytics", "App Performance", "Mobile CI/CD"
+  ],
+  
+  "specializations": [
+    "Full Stack", "Fullstack", "Full-Stack", "Frontend", "Backend", "DevOps",
+    "Site Reliability Engineer", "SRE", "Platform Engineer", "Cloud Engineer",
+    "Data Engineer", "Data Scientist", "ML Engineer", "MLOps Engineer",
+    "Security Engineer", "QA Engineer", "Test Engineer", "SDET",
+    "Technical Lead", "Tech Lead", "Engineering Manager", "Architect",
+    "Solutions Architect", "Enterprise Architect", "Cloud Architect", "Data Architect"
+  ],
+  
+  "soft_skills": [
+    "Leadership", "Communication", "Collaboration", "Problem Solving", "Critical Thinking",
+    "Agile Mindset", "Remote Work", "Team Player", "Mentoring", "Code Review",
+    "Technical Writing", "Documentation", "Presentation Skills", "Stakeholder Management",
+    "Project Management", "Time Management", "Adaptability", "Continuous Learning"
+  ]
+}
