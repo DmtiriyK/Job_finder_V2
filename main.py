@@ -3,7 +3,11 @@
 import asyncio
 import argparse
 import sys
+import os
 from datetime import datetime
+
+# Ensure project root is in sys.path (needed for GitHub Actions / non-installed runs)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from typing import List, Optional
 
 from models.job import Job
