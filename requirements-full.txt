@@ -1,7 +1,6 @@
 -r requirements-light.txt
 
 # Google Sheets Integration
-gspread==6.2.1
 google-auth==2.48.0
 google-auth-oauthlib==1.2.4
 google-auth-httplib2==0.3.0
