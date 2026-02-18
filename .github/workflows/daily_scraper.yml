@@ -49,33 +49,7 @@ jobs:
           pip install -r requirements-full.txt
       
       # =====================================================
-      # 4. Cache Playwright browsers
-      # =====================================================
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('requirements-full.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-      
-      # =====================================================
-      # 5. Install Playwright browsers (if not cached)
-      # =====================================================
-      - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: |
-          playwright install chromium
-          playwright install-deps chromium
-      
-      - name: Install Playwright dependencies only
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: |
-          playwright install-deps chromium
-      
-      # =====================================================
-      # 6. Setup Google Sheets credentials
+      # 4. Setup Google Sheets credentials
       # =====================================================
       - name: Setup Google Sheets credentials
         env:
