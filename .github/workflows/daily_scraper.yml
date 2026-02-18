@@ -65,6 +65,7 @@ jobs:
         env:
           PYTHONUNBUFFERED: "1"
           LOG_LEVEL: "INFO"
+          PYTHONPATH: ${{ github.workspace }}
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             # Manual run with custom parameters
