@@ -109,28 +109,28 @@ class JobFinderPipeline:
             self.logger.warning("No jobs found after scraping")
             return []
         
-        # Step 2: Pre-filter jobs
-        filtered_jobs = self._filter_jobs(all_jobs)
+        # Step 2: Extract tech stack
+        jobs_with_tech = self._extract_tech_stack(all_jobs)
         
-        if not filtered_jobs:
-            self.logger.warning("No jobs remaining after filtering")
-            return []
-        
-        # Step 3: Extract tech stack
-        jobs_with_tech = self._extract_tech_stack(filtered_jobs)
-        
-        # Step 4: Deduplicate
+        # Step 3: Deduplicate
         unique_jobs = self._deduplicate_jobs(jobs_with_tech)
         
         if not unique_jobs:
             self.logger.warning("No jobs remaining after deduplication")
             return []
         
-        # Step 5: Score jobs
+        # Step 4: Score all jobs (before filtering)
         scored_jobs = self._score_jobs(unique_jobs)
         
+        # Step 5: Apply quality filters (age, length)
+        quality_filtered = self._apply_quality_filters(scored_jobs)
+        
+        if not quality_filtered:
+            self.logger.warning("No jobs remaining after quality filtering")
+            return []
+        
         # Step 6: Sort and filter by minimum score
-        top_jobs = self._get_top_jobs(scored_jobs, top_n)
+        top_jobs = self._get_top_jobs(quality_filtered, top_n)
         
         # Log summary
         elapsed = (datetime.now() - start_time).total_seconds()
@@ -166,33 +166,21 @@ class JobFinderPipeline:
         
         return all_jobs
     
-    def _filter_jobs(self, jobs: List[Job]) -> List[Job]:
-        """Apply pre-filtering to jobs."""
-        # Build filter criteria from profile
+    def _apply_quality_filters(self, jobs: List[Job]) -> List[Job]:
+        """Apply quality filters (age, description length, location, seniority) to jobs."""
+        # Build filter criteria - quality metrics + location filtering + seniority
         criteria = {
-            'locations': ['Germany', 'Remote', 'Europe'],
             'min_description_length': 50,
             'max_age_days': 14,  # Last 2 weeks
+            'locations': self.profile.preferences.get('locations', []),
+            'exclude_senior_lead': True  # Exclude Senior/Lead positions
         }
-        
-        # Apply role keywords from profile if available
-        if hasattr(self.profile, 'roles') and self.profile.roles:
-            # Extract role keywords
-            role_keywords = []
-            for role in self.profile.roles:
-                if isinstance(role, str):
-                    role_keywords.append(role)
-                elif isinstance(role, dict):
-                    role_keywords.append(role.get('title', ''))
-            
-            if role_keywords:
-                criteria['role_keywords'] = role_keywords
         
         initial_count = len(jobs)
         filtered = self.job_filter.apply(jobs, criteria)
         
         self.logger.info(
-            f"Pre-filtering (Germany, tech roles, last 14 days): "
+            f"Quality, location & seniority filtering: "
             f"{initial_count} → {len(filtered)} jobs"
         )
         
@@ -243,18 +231,33 @@ class JobFinderPipeline:
         return jobs
     
     def _get_top_jobs(self, jobs: List[Job], top_n: int) -> List[Job]:
-        """Get top N jobs by score."""
+        """Get top N jobs by score with Remote priority."""
         # Filter by minimum score from profile
         min_score = self.profile.get_min_score()
         
-        # Filter and sort
+        # Filter scored jobs
         scored_jobs = [
             job for job in jobs
             if hasattr(job, 'score_result') and job.score_result.score >= min_score
         ]
         
+        # Define remote priority (higher = better)
+        def get_remote_priority(job: Job) -> int:
+            remote_type = (job.remote_type or '').lower()
+            
+            # Full Remote: highest priority
+            if any(kw in remote_type for kw in ['remote', '100%', 'homeoffice', 'fully']):
+                return 3
+            # Hybrid: medium priority
+            elif 'hybrid' in remote_type:
+                return 2
+            # Onsite: lowest priority
+            else:
+                return 1
+        
+        # Sort by: 1) Remote priority (desc), 2) Score (desc)
         scored_jobs.sort(
-            key=lambda j: j.score_result.score,
+            key=lambda j: (get_remote_priority(j), j.score_result.score),
             reverse=True
         )
         
@@ -278,7 +281,7 @@ class JobFinderPipeline:
         # Log top jobs
         for i, job in enumerate(top_jobs[:10], 1):
             score = job.score_result.score
-            tech = ', '.join(job.tech_stack[:5]) if job.tech_stack else 'N/A'
+            tech = ', '.join(list(job.tech_stack)[:5]) if job.tech_stack else 'N/A'
             
             self.logger.info(
                 f"  {i}. [{score:.0f}] {job.title} - {job.company} - {tech}"
@@ -374,7 +377,7 @@ async def main():
             print(f"   Company: {job.company}")
             print(f"   Location: {job.location} ({job.remote_type})")
             if job.tech_stack:
-                print(f"   Tech: {', '.join(job.tech_stack[:8])}")
+                print(f"   Tech: {', '.join(list(job.tech_stack)[:8])}")
             print(f"   URL: {job.url}")
             print()
         

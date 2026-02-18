@@ -13,9 +13,9 @@ on:
         required: false
         default: '20'
       scrapers:
-        description: 'Comma-separated scraper names (e.g. remoteok,weworkremotely)'
+        description: 'Comma-separated scraper names (e.g. remoteok,weworkremotely,stepstone,xing)'
         required: false
-        default: 'remoteok,weworkremotely,hackernews'
+        default: 'remoteok,weworkremotely,stepstone,xing'
 
 jobs:
   scrape-jobs:
@@ -104,7 +104,7 @@ jobs:
             fi
           else
             # Scheduled run with default scrapers
-            python main.py --export-sheets --top-n 20 --scrapers remoteok,weworkremotely,hackernews
+            python main.py --export-sheets --top-n 20 --scrapers remoteok,weworkremotely,stepstone,xing
           fi
       
       # =====================================================

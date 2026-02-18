@@ -17,6 +17,7 @@ from bs4 import BeautifulSoup
 
 from scrapers.base import BaseScraper
 from models.job import Job
+from utils.remote_detector import get_remote_detector
 
 
 class StepStoneScraper(BaseScraper):
@@ -57,6 +58,9 @@ class StepStoneScraper(BaseScraper):
             timeout=20.0,
             max_retries=2
         )
+        
+        # Get remote detector instance
+        self.remote_detector = get_remote_detector()
         
         self.max_pages = max_pages
         self.results_per_page = results_per_page
@@ -147,7 +151,7 @@ class StepStoneScraper(BaseScraper):
         self.logger.debug(f"Fetching: {search_url}")
         
         # Rate limiting
-        await self.rate_limiter.wait()
+        await self.rate_limiter.async_wait()
         
         # Fetch page
         client = await self._get_client()
@@ -284,8 +288,14 @@ class StepStoneScraper(BaseScraper):
             # Extract job ID from URL
             job_id = self._extract_job_id(url)
             
-            # Determine remote type
-            remote_type = self._determine_remote_type(title, description, location)
+            # Determine remote type using unified detector with HTML element
+            remote_type = self.remote_detector.detect(
+                title=title,
+                description=description,
+                location=location,
+                html_element=container,
+                source="stepstone"
+            )
             
             # Posted date (StepStone doesn't always show, use current time)
             posted_date = datetime.now() - timedelta(days=1)  # Assume posted yesterday
@@ -345,38 +355,7 @@ class StepStoneScraper(BaseScraper):
         self.logger.warning("parse_job() called on StepStone scraper - use fetch_jobs() instead")
         return None
     
-    def _determine_remote_type(
-        self,
-        title: str,
-        description: str,
-        location: str
-    ) -> str:
-        """
-        Determine remote work type from job details.
-        
-        Args:
-            title: Job title
-            description: Job description
-            location: Job location
-        
-        Returns:
-            Remote type string
-        """
-        text = f"{title} {description} {location}".lower()
-        
-        # Check for remote indicators
-        remote_keywords = [
-            "remote", "homeoffice", "home office", "home-office",
-            "von zu hause", "deutschlandweit", "ortsunabhängig"
-        ]
-        
-        if any(keyword in text for keyword in remote_keywords):
-            # Check for hybrid
-            if "hybrid" in text or "teilweise" in text:
-                return "Hybrid"
-            return "Remote"
-        
-        return "Onsite"
+
     
     async def close(self):
         """Close HTTP client."""

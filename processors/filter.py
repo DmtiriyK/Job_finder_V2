@@ -99,6 +99,13 @@ class JobFilter:
                 f"Exclude keywords filter: {initial_count} → {len(filtered)} jobs"
             )
         
+        # Apply seniority filter (exclude Senior/Lead in title)
+        if criteria.get('exclude_senior_lead'):
+            filtered = self._filter_by_seniority(filtered)
+            self.logger.debug(
+                f"Seniority filter (exclude Senior/Lead): {initial_count} → {len(filtered)} jobs"
+            )
+        
         # Apply remote-only filter
         if criteria.get('remote_only'):
             filtered = self._filter_by_remote(filtered)
@@ -288,6 +295,33 @@ class JobFilter:
                     filtered.append(job)
             else:
                 # If no contract type specified, include job
+                filtered.append(job)
+        
+        return filtered
+    
+    def _filter_by_seniority(self, jobs: List[Job]) -> List[Job]:
+        """
+        Filter out Senior/Lead positions by checking title.
+        
+        Args:
+            jobs: List of jobs
+        
+        Returns:
+            Jobs without Senior/Lead in title
+        """
+        senior_keywords = [
+            'senior', 'sr.', 'sr', 'lead', 'tech lead', 'team lead',
+            'principal', 'staff', 'architect', 'head of'
+        ]
+        
+        filtered = []
+        for job in jobs:
+            title_lower = job.title.lower()
+            
+            # Exclude if any senior keyword found in title
+            has_senior = any(keyword in title_lower for keyword in senior_keywords)
+            
+            if not has_senior:
                 filtered.append(job)
         
         return filtered

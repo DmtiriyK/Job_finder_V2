@@ -19,6 +19,7 @@ from bs4 import BeautifulSoup
 
 from scrapers.base import BaseScraper
 from models.job import Job
+from utils.remote_detector import get_remote_detector
 
 
 class XINGScraper(BaseScraper):
@@ -60,6 +61,9 @@ class XINGScraper(BaseScraper):
             timeout=20.0,
             max_retries=2
         )
+        
+        # Get remote detector instance
+        self.remote_detector = get_remote_detector()
         
         self.max_pages = max_pages
         self.results_per_page = results_per_page
@@ -159,7 +163,7 @@ class XINGScraper(BaseScraper):
         self.logger.debug(f"Fetching: {search_url}")
         
         # Rate limiting
-        await self.rate_limiter.wait()
+        await self.rate_limiter.async_wait()
         
         # Fetch page
         client = await self._get_client()
@@ -210,12 +214,12 @@ class XINGScraper(BaseScraper):
         # XING uses various class names and data attributes
         job_containers = []
         
-        # Common XING selectors (may change over time)
+        # Common XING selectors (updated Feb 2026)
         selectors = [
-            "article[data-job-id]",        # Main job item with data attribute
-            "div.job-card",                 # Job card container
-            "li.job-listing",               # List item variant
-            "div[data-testid='job-item']"  # Test ID variant
+            "article[data-testid='job-search-result']",  # Current structure (2026)
+            "article[data-job-id]",                       # Fallback: old structure
+            "article",                                    # Fallback: any article
+            "div.job-card",                               # Fallback: older structure
         ]
         
         for selector in selectors:
@@ -259,40 +263,44 @@ class XINGScraper(BaseScraper):
             Job object or None if parsing fails
         """
         try:
-            # Extract title
-            title_elem = (
-                container.select_one("h2 a") or
-                container.select_one("a.job-title") or
-                container.select_one("a[data-testid='job-title']")
-            )
-            
+            # Extract title (from h2 tag)
+            title_elem = container.select_one("h2")
             if not title_elem:
                 return None
             
             title = title_elem.text.strip()
-            url = title_elem.get("href", "")
+            
+            # Extract URL (from main link in article)
+            url_elem = container.select_one("a[href*='/jobs/']")
+            if not url_elem:
+                return None
+            
+            url = url_elem.get("href", "")
             
             # Make URL absolute if relative
             if url and not url.startswith("http"):
                 url = f"{self.base_url}{url}"
             
-            # Extract company
-            company_elem = (
-                container.select_one(".company-name") or
-                container.select_one("div[data-testid='company-name']") or
-                container.select_one("span.job-company")
-            )
+            # Extract company and location from pipe-delimited text
+            # Format: "Other | Title | Company | Location | Contract | Salary"
+            article_text = container.get_text(separator='|', strip=True)
+            parts = [p.strip() for p in article_text.split('|')]
             
-            company = company_elem.text.strip() if company_elem else "Unknown Company"
+            # Find title in parts, company and location follow
+            company = "Unknown Company"
+            location = "Deutschland"
             
-            # Extract location
-            location_elem = (
-                container.select_one(".location") or
-                container.select_one("div[data-testid='job-location']") or
-                container.select_one("span.job-location")
-            )
-            
-            location = location_elem.text.strip() if location_elem else "Deutschland"
+            try:
+                # Find which part matches the title
+                title_idx = next((i for i, p in enumerate(parts) if p == title), -1)
+                
+                if title_idx >= 0 and len(parts) > title_idx + 2:
+                    company = parts[title_idx + 1]
+                    location_raw = parts[title_idx + 2]
+                    # Clean location (remove "+ X weitere" suffix)
+                    location = location_raw.split('+')[0].strip()
+            except Exception:
+                pass
             
             # Extract description preview (if available)
             description_elem = (
@@ -313,8 +321,14 @@ class XINGScraper(BaseScraper):
                 self._extract_job_id(url)
             )
             
-            # Determine remote type
-            remote_type = self._determine_remote_type(title, description, location)
+            # Determine remote type using unified detector with HTML element
+            remote_type = self.remote_detector.detect(
+                title=title,
+                description=description,
+                location=location,
+                html_element=container,
+                source="xing"
+            )
             
             # Posted date (XING doesn't always show, use current time)
             posted_date = datetime.now() - timedelta(days=1)  # Assume posted yesterday
@@ -375,39 +389,7 @@ class XINGScraper(BaseScraper):
         self.logger.warning("parse_job() called on XING scraper - use fetch_jobs() instead")
         return None
     
-    def _determine_remote_type(
-        self,
-        title: str,
-        description: str,
-        location: str
-    ) -> str:
-        """
-        Determine remote work type from job details.
-        
-        Args:
-            title: Job title
-            description: Job description
-            location: Job location
-        
-        Returns:
-            Remote type string
-        """
-        text = f"{title} {description} {location}".lower()
-        
-        # Check for remote indicators (German and English)
-        remote_keywords = [
-            "remote", "homeoffice", "home office", "home-office",
-            "von zu hause", "ortsunabhängig", "deutschlandweit",
-            "work from home", "wfh"
-        ]
-        
-        if any(keyword in text for keyword in remote_keywords):
-            # Check for hybrid
-            if "hybrid" in text or "teilweise" in text or "anteilig" in text:
-                return "Hybrid"
-            return "Remote"
-        
-        return "Onsite"
+
     
     async def close(self):
         """Close HTTP client."""

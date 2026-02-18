@@ -1,8 +1,10 @@
-"""WeWorkRemotely scraper - parses HTML pages for remote jobs."""
+"""WeWorkRemotely scraper - parses RSS feed for remote jobs."""
 
 from typing import List, Optional, Dict, Any
-from datetime import datetime, timedelta
-from bs4 import BeautifulSoup
+from datetime import datetime
+import xml.etree.ElementTree as ET
+from html import unescape
+import re
 
 from scrapers.base import BaseScraper
 from models.job import Job
@@ -10,20 +12,14 @@ from models.job import Job
 
 class WeWorkRemotelyScraper(BaseScraper):
     """
-    Scraper for WeWorkRemotely.com.
+    Scraper for WeWorkRemotely.com using RSS feed.
     
-    WeWorkRemotely provides job listings organized by categories.
-    We'll focus on tech/programming categories.
+    WeWorkRemotely provides a comprehensive RSS feed with all remote jobs.
+    RSS Feed: https://weworkremotely.com/remote-jobs.rss
     """
     
     BASE_URL = "https://weworkremotely.com"
-    
-    # Category URLs for tech jobs
-    CATEGORIES = {
-        "programming": "/categories/remote-programming-jobs",
-        "devops": "/categories/remote-devops-sysadmin-jobs",
-        "full-stack": "/categories/remote-full-stack-programming-jobs",
-    }
+    RSS_URL = "https://weworkremotely.com/remote-jobs.rss"
     
     def __init__(self, **kwargs):
         """Initialize WeWorkRemotely scraper."""
@@ -37,199 +33,215 @@ class WeWorkRemotelyScraper(BaseScraper):
         self,
         keywords: Optional[List[str]] = None,
         location: Optional[str] = None,
-        categories: Optional[List[str]] = None,
         **kwargs
     ) -> List[Job]:
         """
-        Fetch jobs from WeWorkRemotely categories.
+        Fetch jobs from WeWorkRemotely RSS feed.
         
         Args:
             keywords: Keywords to filter jobs (applied to title/description)
-            location: Location filter (mostly ignored for remote jobs)
-            categories: List of category keys to scrape (default: all)
+            location: Location filter (optional, for filtering results)
             **kwargs: Additional parameters
         
         Returns:
             List of Job objects
         """
         try:
-            # Determine which categories to scrape
-            if categories:
-                category_urls = {k: v for k, v in self.CATEGORIES.items() if k in categories}
-            else:
-                category_urls = self.CATEGORIES
+            self.logger.info("Fetching jobs from WeWorkRemotely RSS feed")
             
-            self.logger.info(f"Scraping {len(category_urls)} categories from WeWorkRemotely")
+            # Rate limiting
+            await self.rate_limiter.async_wait()
             
-            all_jobs = []
+            # Fetch RSS feed
+            response = await self._fetch_url(self.RSS_URL)
+            xml_content = response.text
             
-            # Scrape each category
-            for category_name, category_path in category_urls.items():
-                try:
-                    url = f"{self.BASE_URL}{category_path}"
-                    self.logger.debug(f"Fetching category: {category_name} ({url})")
-                    
-                    # Fetch page HTML
-                    response = await self._fetch_url(url)
-                    html_content = response.text
-                    
-                    # Parse HTML
-                    soup = BeautifulSoup(html_content, 'html.parser')
-                    
-                    # Find job listings
-                    job_listings = soup.find_all('li', class_='feature')
-                    
-                    if not job_listings:
-                        self.logger.warning(f"No job listings found in category: {category_name}")
-                        continue
-                    
-                    self.logger.debug(f"Found {len(job_listings)} listings in {category_name}")
-                    
-                    # Parse each listing
-                    for listing in job_listings:
-                        try:
-                            job = self._parse_listing(listing, category_name)
-                            
-                            if job is None:
-                                continue
-                            
-                            # Apply keyword filter
-                            if keywords and not self._matches_keywords(job, keywords):
-                                continue
-                            
-                            all_jobs.append(job)
-                            
-                        except Exception as e:
-                            self.logger.error(f"Failed to parse listing: {e}", exc_info=True)
-                            continue
-                    
-                except Exception as e:
-                    self.logger.error(f"Failed to scrape category {category_name}: {e}", exc_info=True)
-                    continue
+            # Parse XML
+            jobs = self._parse_rss_feed(xml_content)
             
-            self.logger.info(f"Successfully scraped {len(all_jobs)} jobs from WeWorkRemotely")
-            return all_jobs
+            # Apply filters
+            if keywords:
+                jobs = [j for j in jobs if self._matches_keywords(j, keywords)]
+            
+            if location:
+                jobs = [j for j in jobs if self._matches_location(j, location)]
+            
+            self.logger.info(f"WeWorkRemotely: Found {len(jobs)} jobs")
+            
+            return jobs
             
         except Exception as e:
             self.logger.error(f"Failed to fetch jobs from WeWorkRemotely: {e}", exc_info=True)
             return []
     
-    def _parse_listing(self, listing: Any, category: str) -> Optional[Job]:
+    def _parse_rss_feed(self, xml_content: str) -> List[Job]:
         """
-        Parse job listing element into Job model.
+        Parse WeWorkRemotely RSS feed XML.
         
         Args:
-            listing: BeautifulSoup element for job listing
-            category: Category name
+            xml_content: RSS feed XML string
         
         Returns:
-            Job object or None if parsing failed
+            List of Job objects
+        """
+        jobs = []
+        
+        try:
+            root = ET.fromstring(xml_content)
+            
+            # Find all job items in the feed
+            for item in root.findall(".//item"):
+                try:
+                    job = self._parse_rss_item(item)
+                    if job:
+                        jobs.append(job)
+                except Exception as e:
+                    self.logger.debug(f"Error parsing RSS item: {e}")
+                    continue
+            
+        except ET.ParseError as e:
+            self.logger.error(f"XML parsing error: {e}")
+        
+        return jobs
+    
+    def _parse_rss_item(self, item: ET.Element) -> Optional[Job]:
+        """
+        Parse a single RSS item into a Job object.
+        
+        RSS item structure:
+        <item>
+          <title>Company: Job Title (Remote, Location)</title>
+          <link>URL</link>
+          <region>Location</region>
+          <category>Category</category>
+          <type>Full-Time/Contract/Part-Time</type>
+          <description>HTML description</description>
+          <pubDate>Date</pubDate>
+        </item>
+        
+        Args:
+            item: XML Element representing a job item
+        
+        Returns:
+            Job object or None if parsing fails
         """
         try:
-            # Find job link
-            link_elem = listing.find('a', class_='browse_feature_job_item')
-            if not link_elem:
-                self.logger.warning("No job link found in listing")
+            # Extract fields from RSS item
+            title_elem = item.find("title")
+            link_elem = item.find("link")
+            region_elem = item.find("region")
+            category_elem = item.find("category")
+            type_elem = item.find("type")
+            description_elem = item.find("description")
+            pubdate_elem = item.find("pubDate")
+            
+            if title_elem is None or link_elem is None:
                 return None
             
-            # Extract URL
-            job_path = link_elem.get('href', '').strip()
-            if not job_path:
-                self.logger.warning("Empty job URL")
-                return None
+            # Parse title: "Company: Job Title (Info)"
+            full_title = unescape(title_elem.text or "").strip()
+            url = link_elem.text or ""
             
-            url = f"{self.BASE_URL}{job_path}" if job_path.startswith('/') else job_path
+            # Split title into company and job title
+            company, job_title = self._parse_title(full_title)
             
-            # Extract title
-            title_elem = link_elem.find('span', class_='title')
-            title = title_elem.get_text(strip=True) if title_elem else ''
+            # Location
+            location = unescape(region_elem.text or "Worldwide").strip() if region_elem is not None and region_elem.text else "Worldwide"
             
-            if not title:
-                self.logger.warning("Empty job title")
-                return None
+            # Category
+            category = unescape(category_elem.text or "").strip() if category_elem is not None and category_elem.text else ""
             
-            # Extract company
-            company_elem = link_elem.find('span', class_='company')
-            company = company_elem.get_text(strip=True) if company_elem else 'Unknown'
+            # Contract type
+            contract_type = unescape(type_elem.text or "").strip() if type_elem is not None and type_elem.text else None
             
-            # Extract region/location (optional)
-            region_elem = link_elem.find('span', class_='region')
-            location = region_elem.get_text(strip=True) if region_elem else 'Worldwide'
+            # Description (contains HTML, clean it)
+            description = ""
+            if description_elem is not None and description_elem.text:
+                description = self._clean_html(description_elem.text)
             
-            # Extract job type tags (contract type, etc.)
-            tags = []
-            tag_elements = link_elem.find_all('span', class_='tag')
-            for tag_elem in tag_elements:
-                tag_text = tag_elem.get_text(strip=True)
-                if tag_text:
-                    tags.append(tag_text)
-            
-            # Determine contract type from tags
-            contract_type = None
-            for tag in tags:
-                tag_lower = tag.lower()
-                if 'full-time' in tag_lower or 'full time' in tag_lower:
-                    contract_type = 'Full-time'
-                    break
-                elif 'contract' in tag_lower:
-                    contract_type = 'Contract'
-                    break
-                elif 'part-time' in tag_lower or 'part time' in tag_lower:
-                    contract_type = 'Part-time'
-                    break
-            
-            # Posted date - WeWorkRemotely doesn't provide dates in listings
-            # Default to current date (will be filtered if too old)
+            # Posted date
             posted_date = datetime.now()
+            if pubdate_elem is not None and pubdate_elem.text:
+                try:
+                    parsed_date = datetime.strptime(
+                        pubdate_elem.text.strip(),
+                        "%a, %d %b %Y %H:%M:%S %z"
+                    )
+                    # Remove timezone info to make it naive (compatible with datetime.now())
+                    posted_date = parsed_date.replace(tzinfo=None)
+                except:
+                    pass
             
-            # Description placeholder (will need to fetch detail page for full description)
-            # For now, use title and tags as description
-            description = f"{title}. Category: {category}. "
-            if tags:
-                description += f"Tags: {', '.join(tags)}."
+            # Remote type (WeWorkRemotely is remote-only by nature)
+            remote_type = "Remote"
             
             # Generate unique ID
-            job_id = Job.generate_id(url=url, title=title)
+            job_id = f"wwr_{hash(url) % 1000000000}"
             
             # Create Job object
             job = Job(
                 id=job_id,
-                title=title,
+                title=job_title,
                 company=company,
                 location=location,
-                remote_type="Full Remote",  # WeWorkRemotely is remote-only
+                remote_type=remote_type,
                 url=url,
-                description=description,
+                description=description or f"{job_title} at {company}. Category: {category}.",
                 posted_date=posted_date,
-                source=self.name,
-                source_id=url,
-                tech_stack=None,  # Will be extracted later by TechStackExtractor
-                salary_min=None,
-                salary_max=None,
+                source="WeWorkRemotely",
                 contract_type=contract_type
             )
             
             return job
             
         except Exception as e:
-            self.logger.error(f"Failed to parse listing: {e}", exc_info=True)
+            self.logger.debug(f"Error parsing RSS item: {e}")
             return None
     
-    def parse_job(self, raw_data: Dict[str, Any]) -> Optional[Job]:
+    def _parse_title(self, full_title: str) -> tuple:
         """
-        Parse raw job data into Job model.
-        
-        For WeWorkRemotely, we use _parse_listing() instead.
-        This method is here for BaseScraper compatibility.
+        Parse WeWorkRemotely title format: "Company: Job Title (Extra Info)".
         
         Args:
-            raw_data: Raw job data
+            full_title: Full RSS item title
         
         Returns:
-            Job object or None
+            Tuple of (company, job_title)
         """
-        # Not used for WeWorkRemotely (we parse HTML directly)
-        return None
+        # Remove extra info in parentheses
+        title_cleaned = re.sub(r'\([^)]+\)', '', full_title).strip()
+        
+        # Split by colon
+        if ': ' in title_cleaned:
+            parts = title_cleaned.split(': ', 1)
+            company = parts[0].strip()
+            job_title = parts[1].strip()
+        else:
+            company = "Unknown Company"
+            job_title = title_cleaned
+        
+        return company, job_title
+    
+    def _clean_html(self, html_text: str) -> str:
+        """
+        Remove HTML tags and clean description text.
+        
+        Args:
+            html_text: Text potentially containing HTML
+        
+        Returns:
+            Clean text
+        """
+        # Remove HTML tags
+        text = re.sub(r"<[^>]+>", " ", html_text)
+        
+        # Unescape HTML entities
+        text = unescape(text)
+        
+        # Clean whitespace
+        text = re.sub(r"\s+", " ", text).strip()
+        
+        return text
     
     def _matches_keywords(self, job: Job, keywords: List[str]) -> bool:
         """
@@ -242,8 +254,37 @@ class WeWorkRemotelyScraper(BaseScraper):
         Returns:
             True if job matches any keyword
         """
-        # Combine searchable fields
         searchable = f"{job.title} {job.description} {job.company}".lower()
-        
-        # Check if any keyword matches
         return any(keyword.lower() in searchable for keyword in keywords)
+    
+    def _matches_location(self, job: Job, location: str) -> bool:
+        """
+        Check if job matches location filter.
+        
+        Args:
+            job: Job object
+            location: Location string to match
+        
+        Returns:
+            True if job matches location
+        """
+        job_location = job.location.lower()
+        location_check = location.lower()
+        
+        # Match if location is in job location or vice versa
+        return location_check in job_location or job_location in location_check or job_location == "worldwide"
+    
+    def parse_job(self, raw_data: Dict[str, Any]) -> Optional[Job]:
+        """
+        Parse raw job data into Job model.
+        
+        For WeWorkRemotely, we use RSS parsing instead.
+        This method is here for BaseScraper compatibility.
+        
+        Args:
+            raw_data: Raw job data
+        
+        Returns:
+            Job object or None
+        """
+        return None

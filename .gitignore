@@ -91,3 +91,19 @@ models/
 !.env.example
 !config/*.example
 !config/*.yaml.example
+
+# Research / debug scripts (temporary)
+analyze_*.py
+debug_*.py
+find_*.py
+list_*.py
+
+# Scraped HTML snapshots (temporary research files)
+*.html
+
+# Quick test scripts (not part of test suite)
+test_remoteok_quick.py
+test_stepstone_debug.py
+test_wwr_feed.py
+test_xing_access.py
+test_indeed_html.py

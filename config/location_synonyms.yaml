@@ -1,0 +1,240 @@
+# Location synonyms for flexible location matching
+# Used by LocationComponent scorer to recognize country/city variants
+
+# Germany and its cities
+Germany:
+  country_names:
+    - Germany
+    - Deutschland
+    - DE
+    - Allemagne  # French
+    - Alemania   # Spanish
+    - Germania   # Italian
+  
+  cities:
+    # Major tech hubs
+    - Berlin
+    - München
+    - Munich     # English variant
+    - Hamburg
+    - Frankfurt
+    - Frankfurt am Main
+    - Köln
+    - Cologne    # English variant
+    - Düsseldorf
+    - Stuttgart
+    - Dortmund
+    - Essen
+    - Leipzig
+    - Dresden
+    - Hannover
+    - Hanover    # English variant
+    - Nürnberg
+    - Nuremberg  # English variant
+    - Bremen
+    - Karlsruhe
+    - Bonn
+    - Münster
+    - Mannheim
+    - Augsburg
+    - Wiesbaden
+    - Gelsenkirchen
+    - Mönchengladbach
+    - Braunschweig
+    - Brunswick  # English variant
+    - Aachen
+    - Kiel
+    - Chemnitz
+    - Halle
+    - Magdeburg
+    - Freiburg
+    - Krefeld
+    - Mainz
+    - Lübeck
+    - Erfurt
+    - Rostock
+    - Kassel
+    - Hagen
+    - Potsdam
+    - Saarbrücken
+    - Hamm
+    - Ludwigshafen
+    - Oldenburg
+    - Osnabrück
+    - Leverkusen
+    - Solingen
+    - Heidelberg
+    - Paderborn
+    - Darmstadt
+    - Würzburg
+    - Regensburg
+    - Wolfsburg
+    - Recklinghausen
+    - Göttingen
+    - Heilbronn
+    - Ingolstadt
+    - Ulm
+    - Bottrop
+    - Pforzheim
+
+  regions:
+    - Bayern
+    - Bavaria     # English
+    - Baden-Württemberg
+    - BW
+    - Nordrhein-Westfalen
+    - NRW
+    - North Rhine-Westphalia  # English
+    - Hessen
+    - Hesse       # English
+    - Niedersachsen
+    - Lower Saxony  # English
+    - Rheinland-Pfalz
+    - Rhineland-Palatinate  # English
+    - Sachsen
+    - Saxony      # English
+    - Schleswig-Holstein
+    - Brandenburg
+    - Thüringen
+    - Thuringia   # English
+    - Mecklenburg-Vorpommern
+    - Sachsen-Anhalt
+    - Saxony-Anhalt  # English
+    - Saarland
+    - Bremen
+    - Hamburg     # City-state
+    - Berlin      # City-state
+
+# Remote work keywords
+Remote:
+  - Remote
+  - Fully Remote
+  - 100% Remote
+  - Full Remote
+  - Fernarbeit
+  - Homeoffice
+  - Home Office
+  - Work from Home
+  - WFH
+  - Remote Work
+  - Remote-First
+  - Dezentral
+  - Decentralized
+  - Distributed
+  - Distributed Team
+  - Ortsunabhängig
+  - Location Independent
+  - Remote innerhalb Deutschland
+  - Remote innerhalb Deutschlands
+  - Remote in Germany
+  - Deutschlandweit Remote
+  - Worldwide Remote
+  - Global Remote
+  - EU Remote
+  - Europe Remote
+
+# Hybrid work keywords (for future use)
+Hybrid:
+  - Hybrid
+  - Teilweise Remote
+  - Partially Remote
+  - Remote möglich
+  - Remote possible
+  - Flexible
+  - Flexible Remote
+  - Remote-freundlich
+  - Remote-friendly
+
+# Austria (neighboring country, sometimes acceptable)
+Austria:
+  country_names:
+    - Austria
+    - Österreich
+    - AT
+    - Autriche  # French
+  
+  cities:
+    - Wien
+    - Vienna    # English
+    - Graz
+    - Linz
+    - Salzburg
+    - Innsbruck
+    - Klagenfurt
+
+# Switzerland (neighboring country, sometimes acceptable)
+Switzerland:
+  country_names:
+    - Switzerland
+    - Schweiz
+    - Suisse
+    - Svizzera
+    - Svizra
+    - CH
+  
+  cities:
+    - Zürich
+    - Zurich    # English
+    - Genf
+    - Geneva    # English
+    - Basel
+    - Bern
+    - Lausanne
+    - Luzern
+    - Lucerne   # English
+
+# Europe (broad region)
+Europe:
+  - Europe
+  - Europa
+  - EU
+  - European Union
+  - Европа
+  - DACH      # Germany, Austria, Switzerland region
+  - DACH-Region
+
+# Netherlands (EU neighbor)
+Netherlands:
+  country_names:
+    - Netherlands
+    - Niederlande
+    - Holland
+    - NL
+  
+  cities:
+    - Amsterdam
+    - Rotterdam
+    - Den Haag
+    - The Hague  # English
+    - Utrecht
+    - Eindhoven
+
+# Other EU countries (for reference)
+EU_Countries:
+  - France
+  - Frankreich
+  - Spain
+  - Spanien
+  - Italy
+  - Italien
+  - Poland
+  - Polen
+  - Belgium
+  - Belgien
+  - Sweden
+  - Schweden
+  - Denmark
+  - Dänemark
+  - Finland
+  - Finnland
+  - Ireland
+  - Irland
+  - Portugal
+  - Czech Republic
+  - Tschechien
+  - Greece
+  - Griechenland
+  - Hungary
+  - Ungarn
+  - Romania
+  - Rumänien

@@ -142,7 +142,7 @@ class IndeedScraper(BaseScraper):
         self.logger.debug(f"Fetching RSS: {rss_url}")
         
         # Rate limiting
-        await self.rate_limiter.wait()
+        await self.rate_limiter.async_wait()
         
         # Fetch RSS feed
         client = await self._get_client()

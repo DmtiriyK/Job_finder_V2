@@ -75,7 +75,7 @@ class GoogleSheetsWriter:
             )
         
         self.credentials_path = credentials_path
-        self.spreadsheet_name = spreadsheet_name or "Job Finder Results"
+        self.spreadsheet_name = spreadsheet_name or "Job_finder_results"
         
         # Check if credentials exist
         if not os.path.exists(credentials_path):
@@ -286,7 +286,7 @@ class GoogleSheetsWriter:
             tech_stack,
             str(score) if score is not None else "",
             breakdown,
-            job.url,
+            str(job.url),  # Convert HttpUrl to string
             job.source,
             "",  # Applied? (empty checkbox)
             ""   # Notes (empty)

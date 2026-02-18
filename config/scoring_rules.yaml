@@ -2,11 +2,12 @@
 # Total = 100 points (sum of all max_points)
 scoring:
   max_points:
-    tfidf_similarity: 40
-    tech_stack: 30
-    remote_type: 15
-    keywords: 10
-    contract_type: 5
+    tfidf_similarity: 35   # Reduced from 40
+    tech_stack: 25          # Reduced from 30
+    location: 15            # NEW: Location match with synonym support
+    remote_type: 15         # Unchanged
+    keywords: 8             # Reduced from 10
+    contract_type: 2        # Reduced from 5
 
 # Tech stack scoring rules
 tech_stack:
@@ -65,6 +66,27 @@ remote:
         - "remote innerhalb Deutschlands"
         - "vollständig remote"
         - "komplett remote"
+        - "homeoffice"           # NEW: German homeoffice
+        - "home office"          # NEW: Separated
+        - "work from home"       # NEW: Common phrase
+        - "wfh"                  # NEW: Abbreviation
+        - "fernarbeit"           # NEW: German term
+        - "von zu hause"         # NEW: German phrase
+        - "distributed team"     # NEW: Team structure
+        - "remote-first"         # NEW: Company culture
+        - "ortsunabhängig"       # NEW: German location-independent
+        - "deutschlandweit remote" # NEW: Germany-wide remote
+    
+    hybrid_flexible:
+      score: 4
+      patterns:
+        - "flexible.*remote"
+        - "teilweise remote"
+        - "remote.*möglich"
+        - "remote possible"
+        - "hybrid.*flexible"
+        - "flexible arbeitsort"
+        - "flexible work location"
     
     hybrid_1day:
       score: 3
@@ -73,12 +95,14 @@ remote:
         - "1 day.*week"
         - "hybrid.*1.*Tag"
         - "ein Tag.*Büro"
+        - "1x.*Woche.*Büro"
     
     hybrid_2days:
       score: 0
       patterns:
         - "2 Tage.*Woche"
         - "2 days.*week"
+        - "2x.*Woche.*Büro"
     
     onsite_required:
       score: -3
@@ -88,6 +112,8 @@ remote:
         - "onsite only"
         - "zwingend vor Ort"
         - "3-5 Tage.*vor Ort"
+        - "täglich vor Ort"
+        - "daily onsite"
 
 # Keywords scoring
 keywords:

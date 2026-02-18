@@ -157,7 +157,7 @@ class AdzunaScraper(BaseScraper):
         url = f"{endpoint}?{urlencode(params)}"
         
         # Rate limiting
-        await self.rate_limiter.wait()
+        await self.rate_limiter.async_wait()
         
         # Fetch data
         client = await self._get_client()

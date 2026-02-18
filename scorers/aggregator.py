@@ -7,6 +7,7 @@ from models.job import ScoreResult
 from scorers.components import (
     TfidfComponent,
     TechStackComponent,
+    LocationComponent,
     RemoteComponent,
     KeywordComponent,
     ContractComponent
@@ -19,11 +20,12 @@ class ScoreAggregator:
     Aggregate scores from all components into final score (0-100).
     
     Components:
-    - TF-IDF similarity: 40 points
-    - Tech stack match: 30 points
+    - TF-IDF similarity: 35 points
+    - Tech stack match: 25 points
+    - Location match: 15 points
     - Remote preference: 15 points
-    - Keywords: 10 points
-    - Contract type: 5 points
+    - Keywords: 8 points
+    - Contract type: 2 points
     
     Total: 100 points
     """
@@ -34,11 +36,12 @@ class ScoreAggregator:
         
         # Initialize all scoring components
         self.components = {
-            'tfidf': TfidfComponent(max_score=40.0),
-            'tech_stack': TechStackComponent(max_score=30.0),
+            'tfidf': TfidfComponent(max_score=35.0),
+            'tech_stack': TechStackComponent(max_score=25.0),
+            'location': LocationComponent(max_score=15.0),
             'remote': RemoteComponent(max_score=15.0),
-            'keywords': KeywordComponent(max_score=10.0),
-            'contract': ContractComponent(max_score=5.0)
+            'keywords': KeywordComponent(max_score=8.0),
+            'contract': ContractComponent(max_score=2.0)
         }
         
         self.logger.info(
