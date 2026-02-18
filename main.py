@@ -22,7 +22,7 @@ from processors.filter import JobFilter
 from processors.deduplicator import Deduplicator
 from scorers.aggregator import ScoreAggregator
 from integrations.google_sheets import GoogleSheetsWriter
-from utils.logger import get_logger
+from utils.logger import get_logger, setup_logging
 
 
 class JobFinderPipeline:
@@ -341,6 +341,10 @@ async def main():
     )
     
     args = parser.parse_args()
+    
+    # Initialize logging (writes to logs/scraper.log + console)
+    log_level = args.dev_mode and "DEBUG" or "INFO"
+    setup_logging(log_level=log_level, log_to_file=True)
     
     # Parse scrapers
     scrapers = None

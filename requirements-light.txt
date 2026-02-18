@@ -27,3 +27,4 @@ google-auth-httplib2==0.3.0
 
 # Scraping helpers
 feedparser==6.0.10
+tenacity==8.2.3
