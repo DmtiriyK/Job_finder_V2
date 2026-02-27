@@ -182,16 +182,35 @@ class GoogleSheetsWriter:
     def _get_or_create_spreadsheet(self) -> gspread.Spreadsheet:
         """
         Get or create spreadsheet.
+
+        Prefers opening by SPREADSHEET_ID (env var GOOGLE_SHEETS_SPREADSHEET_ID)
+        when available, which is more reliable than searching by name across
+        all sheets the service account can see.
         
         Returns:
             Spreadsheet object
         """
+        # Prefer opening by ID — reliable even when name is ambiguous
+        spreadsheet_id = os.environ.get('GOOGLE_SHEETS_SPREADSHEET_ID')
+        if spreadsheet_id:
+            try:
+                spreadsheet = self.client.open_by_key(spreadsheet_id)
+                self.logger.info(
+                    f"Opened spreadsheet by ID: {spreadsheet_id[:12]}..."
+                )
+                return spreadsheet
+            except Exception as e:
+                self.logger.warning(
+                    f"Could not open spreadsheet by ID '{spreadsheet_id[:12]}...': {e}. "
+                    "Falling back to open by name."
+                )
+
         try:
-            # Try to open existing spreadsheet
+            # Try to open existing spreadsheet by name
             spreadsheet = self.client.open(self.spreadsheet_name)
             self.logger.info(f"Opened existing spreadsheet: {self.spreadsheet_name}")
             return spreadsheet
-            
+
         except gspread.SpreadsheetNotFound:
             # Create new spreadsheet
             self.logger.info(f"Creating new spreadsheet: {self.spreadsheet_name}")

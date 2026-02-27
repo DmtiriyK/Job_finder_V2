@@ -17,8 +17,6 @@ from scrapers.weworkremotely import WeWorkRemotelyScraper
 from scrapers.hackernews import HackerNewsScraper
 from scrapers.adzuna import AdzunaScraper
 from scrapers.indeed import IndeedScraper
-from scrapers.stackoverflow import StackOverflowScraper
-from scrapers.github_jobs import GitHubJobsScraper
 from scrapers.stepstone import StepStoneScraper
 from scrapers.xing import XINGScraper
 from extractors.tech_extractor import TechStackExtractor
@@ -34,15 +32,13 @@ class JobFinderPipeline:
     Main pipeline for scraping, filtering, and scoring jobs.
     """
     
-    # Available scrapers (all 9)
+    # Available scrapers
     SCRAPERS = {
         'remoteok': RemoteOKScraper,
         'weworkremotely': WeWorkRemotelyScraper,
         'hackernews': HackerNewsScraper,
         'adzuna': AdzunaScraper,
         'indeed': IndeedScraper,
-        'stackoverflow': StackOverflowScraper,
-        'github': GitHubJobsScraper,
         'stepstone': StepStoneScraper,
         'xing': XINGScraper,
     }

@@ -13,9 +13,9 @@ on:
         required: false
         default: '20'
       scrapers:
-        description: 'Comma-separated scraper names (e.g. remoteok,weworkremotely,stepstone,xing)'
+        description: 'Comma-separated scraper names (e.g. remoteok,weworkremotely,hackernews,stepstone,xing)'
         required: false
-        default: 'remoteok,weworkremotely,stepstone,xing'
+        default: 'remoteok,weworkremotely,hackernews,stepstone,xing'
 
 jobs:
   scrape-jobs:
@@ -70,6 +70,8 @@ jobs:
           PYTHONUNBUFFERED: "1"
           LOG_LEVEL: "INFO"
           PYTHONPATH: ${{ github.workspace }}
+          GOOGLE_SHEETS_SPREADSHEET_ID: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID }}
+          GOOGLE_SHEETS_SHARE_EMAIL: ${{ secrets.GOOGLE_SHEETS_SHARE_EMAIL }}
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             # Manual run with custom parameters
@@ -83,7 +85,7 @@ jobs:
             fi
           else
             # Scheduled run with default scrapers
-            python main.py --export-sheets --top-n 20 --scrapers remoteok,weworkremotely,stepstone,xing
+            python main.py --export-sheets --top-n 20 --scrapers remoteok,weworkremotely,hackernews,stepstone,xing
           fi
       
       # =====================================================

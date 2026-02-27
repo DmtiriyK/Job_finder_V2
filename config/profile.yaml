@@ -82,9 +82,15 @@ preferences:
   locations:
     - "Germany"
     - "Deutschland"
-    - "Remote"
+    - "Berlin"
+    - "München"
+    - "Hamburg"
+    - "Frankfurt"
+    - "Köln"
+    - "Stuttgart"
+    - "Düsseldorf"
   
-  min_score: 60  # Minimum score to include in results
+  min_score: 60  # Minimum score threshold for job export (0-100)
 
 # Profile text for TF-IDF matching
 # Natural language summary of skills and experience

@@ -48,6 +48,7 @@ class ScoreAggregator:
             f"Initialized {len(self.components)} scoring components "
             f"(total max: 100 points)"
         )
+        self.verify_total_weight()
     
     def score_job(self, job: Job, profile: Profile) -> ScoreResult:
         """

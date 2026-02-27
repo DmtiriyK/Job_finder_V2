@@ -123,9 +123,10 @@ class JobFilter:
                 f"Contract type filter: {initial_count} → {len(filtered)} jobs"
             )
         
+        retention_pct = len(filtered) / initial_count * 100 if initial_count > 0 else 0.0
         self.logger.info(
             f"Total filtering: {initial_count} → {len(filtered)} jobs "
-            f"({len(filtered)/initial_count*100:.1f}% retained)"
+            f"({retention_pct:.1f}% retained)"
         )
         
         return filtered

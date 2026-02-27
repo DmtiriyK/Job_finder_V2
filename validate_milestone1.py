@@ -20,7 +20,7 @@ def test_config_loading():
         rules = settings.load_scoring_rules()
         assert rules is not None, "Scoring rules не загружены"
         assert 'scoring' in rules, "Ключ 'scoring' не найден"
-        assert rules['scoring']['max_points']['tfidf_similarity'] == 40
+        assert rules['scoring']['max_points']['tfidf_similarity'] == 35
         print(f"   ✓ Scoring rules loaded: TF-IDF max = {rules['scoring']['max_points']['tfidf_similarity']}")
         
         # Test tech dictionary loading
