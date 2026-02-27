@@ -3,7 +3,7 @@
 # После установки задача будет запускаться каждый день в 09:00
 
 $TaskName   = "JobFinderDaily"
-$ScriptPath = "C:\Users\kenih\OneDrive\Рабочий стол\Job_finder\run_local.ps1"
+$ScriptPath = Join-Path $PSScriptRoot "run_local.ps1"
 $RunTime    = "09:00"
 
 # Проверить что скрипт существует
@@ -51,7 +51,7 @@ Write-Host "To run immediately for testing:" -ForegroundColor Yellow
 Write-Host "  Start-ScheduledTask -TaskName '$TaskName'" -ForegroundColor White
 Write-Host ""
 Write-Host "To view logs:" -ForegroundColor Yellow
-Write-Host "  notepad `"C:\Users\kenih\OneDrive\Рабочий стол\Job_finder\logs\local_run.log`"" -ForegroundColor White
+Write-Host "  notepad `"$(Join-Path $PSScriptRoot 'logs\local_run.log')`"" -ForegroundColor White
 Write-Host ""
 Write-Host "To remove the task:" -ForegroundColor Yellow
 Write-Host "  Unregister-ScheduledTask -TaskName '$TaskName' -Confirm:`$false" -ForegroundColor White
