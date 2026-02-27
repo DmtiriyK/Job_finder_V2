@@ -118,7 +118,7 @@ class XINGScraper(BaseScraper):
                     break
                 
             except Exception as e:
-                self.logger.error(f"Error fetching page {page}: {e}")
+                self.logger.error(f"Error fetching page {page}: {repr(e)}")
                 continue
         
         # Note: Due to XING's authentication requirements, we may get 0 results

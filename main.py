@@ -134,7 +134,7 @@ class JobFinderPipeline:
         
         # Log summary
         elapsed = (datetime.now() - start_time).total_seconds()
-        self._log_summary(top_jobs, elapsed)
+        self._log_summary(top_jobs, elapsed, all_scored=quality_filtered)
         
         return top_jobs
     
@@ -263,10 +263,32 @@ class JobFinderPipeline:
         
         return scored_jobs[:top_n]
     
-    def _log_summary(self, top_jobs: List[Job], elapsed_seconds: float):
+    def _log_summary(self, top_jobs: List[Job], elapsed_seconds: float, all_scored: Optional[List[Job]] = None):
         """Log pipeline summary."""
         if not top_jobs:
-            self.logger.info("No jobs passed minimum score threshold")
+            self.logger.info(
+                f"No jobs passed minimum score threshold "
+                f"({self.profile.get_min_score():.0f} pts)"
+            )
+            # Show diagnostic: top-5 by score so we can see why nothing passed
+            if all_scored:
+                best = sorted(
+                    [j for j in all_scored if hasattr(j, 'score_result')],
+                    key=lambda j: j.score_result.score,
+                    reverse=True
+                )[:5]
+                if best:
+                    self.logger.info("Top-5 by score (below threshold):")
+                    for i, job in enumerate(best, 1):
+                        sc = job.score_result
+                        self.logger.info(
+                            f"  {i}. [{sc.score:.0f}] {job.title} - {job.company} "
+                            f"| tfidf={sc.breakdown.get('tfidf',{}).get('normalized',0):.0f} "
+                            f"tech={sc.breakdown.get('tech_stack',{}).get('normalized',0):.0f} "
+                            f"loc={sc.breakdown.get('location',{}).get('normalized',0):.0f} "
+                            f"remote={sc.breakdown.get('remote',{}).get('normalized',0):.0f}"
+                        )
+            self.logger.info(f"Pipeline completed in {elapsed_seconds:.0f} seconds (0 results above threshold)")
             return
         
         # Get score range

@@ -115,7 +115,7 @@ class StepStoneScraper(BaseScraper):
                     break
                 
             except Exception as e:
-                self.logger.error(f"Error fetching page {page}: {e}")
+                self.logger.error(f"Error fetching page {page}: {repr(e)}")
                 continue
         
         self.logger.info(f"StepStone: Found {len(jobs)} jobs total")
