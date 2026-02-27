@@ -90,7 +90,7 @@ preferences:
     - "Stuttgart"
     - "Düsseldorf"
   
-  min_score: 60  # Minimum score threshold for job export (0-100)
+  min_score: 30  # Realistic threshold: German jobs score 25-55 (TF-IDF near 0 for cross-language matching)
 
 # Profile text for TF-IDF matching
 # Natural language summary of skills and experience
@@ -125,6 +125,16 @@ profile_text: |
   
   Key strengths: API integrations, OAuth/authentication, payment systems, Docker/Linux deployment,
   data pipelines, production stability, remote collaboration, startup experience.
+  
+  --- Deutsch ---
+  Full-Stack- und Platform-Engineer mit Produktionserfahrung in Remote-Startup-Umgebungen.
+  Kenntnisse in Frontend-Entwicklung mit React und TypeScript (Zustand, Hooks, SPA).
+  Backend-Entwicklung mit C#, .NET, Python und REST API. Datenbankdesign mit PostgreSQL und MySQL.
+  DevOps-Erfahrung: Docker, Linux, Nginx, CI/CD mit GitHub Actions.
+  Fullstack-Entwickler, Softwareentwickler, Backend-Entwickler, Webentwickler.
+  Kenntnisse: Softwareentwicklung, API-Integration, OAuth, Authentifizierung, Zahlungssysteme,
+  Containerisierung, Datenverarbeitung, ETL, Web Scraping, Datenbankoptimierung.
+  Suche Remote- oder Hybrid-Stellen als Softwareentwickler oder Full-Stack-Entwickler in Deutschland.
 
 # ============================================================================
 # DETAILED CV DATA (For reference and future enhancements)
