@@ -263,8 +263,12 @@ class XINGScraper(BaseScraper):
             Job object or None if parsing fails
         """
         try:
-            # Extract title (from h2 tag)
-            title_elem = container.select_one("h2")
+            # Extract title (from h3 or data-testid attribute)
+            title_elem = (
+                container.select_one("[data-testid='job-teaser-list-title']") or
+                container.select_one("h3") or
+                container.select_one("h2")
+            )
             if not title_elem:
                 return None
             
@@ -281,21 +285,28 @@ class XINGScraper(BaseScraper):
             if url and not url.startswith("http"):
                 url = f"{self.base_url}{url}"
             
-            # Extract company and location from pipe-delimited text
-            # Format: "Other | Title | Company | Location | Contract | Salary"
-            article_text = container.get_text(separator='|', strip=True)
-            parts = [p.strip() for p in article_text.split('|')]
-            
-            # Find title in parts, company and location follow
+            # Extract company from logo image aria-label
             company = "Unknown Company"
             location = "Deutschland"
             
             try:
-                # Find which part matches the title
-                title_idx = next((i for i, p in enumerate(parts) if p == title), -1)
+                # Company logo image has aria-label with company name
+                company_img = container.select_one("img[aria-label]")
+                if company_img and company_img.get("aria-label", "").strip():
+                    company = company_img["aria-label"].strip()
+                else:
+                    # Fallback: pipe-delimited text — company is the part after the title
+                    article_text = container.get_text(separator='|', strip=True)
+                    parts = [p.strip() for p in article_text.split('|') if p.strip()]
+                    title_idx = next((i for i, p in enumerate(parts) if p == title), -1)
+                    if title_idx >= 0 and len(parts) > title_idx + 1:
+                        company = parts[title_idx + 1]
                 
+                # Extract location from pipe-delimited text
+                article_text = container.get_text(separator='|', strip=True)
+                parts = [p.strip() for p in article_text.split('|') if p.strip()]
+                title_idx = next((i for i, p in enumerate(parts) if p == title), -1)
                 if title_idx >= 0 and len(parts) > title_idx + 2:
-                    company = parts[title_idx + 1]
                     location_raw = parts[title_idx + 2]
                     # Clean location (remove "+ X weitere" suffix)
                     location = location_raw.split('+')[0].strip()

@@ -256,6 +256,9 @@ class StepStoneScraper(BaseScraper):
             
             # Extract company
             company_elem = (
+                container.select_one("[data-at='job-item-company-name']") or
+                container.select_one("[data-at='metadata-company-name']") or
+                container.select_one(".at-listing__list-icons_company-name") or
                 container.select_one(".job-element-company") or
                 container.select_one("div[data-at='job-item-company']") or
                 container.select_one(".company-name")
