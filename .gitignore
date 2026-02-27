@@ -52,8 +52,10 @@ config/*_credentials.json
 logs/
 *.log
 
-# Cache
-cache/
+# Cache runtime data (diskcache files, but NOT the Python package cache/)
+cache/*.db
+cache/CACHEDIR.TAG
+cache/cache.db
 *.cache
 .cache/
 __pycache__/
@@ -83,9 +85,12 @@ Thumbs.db
 # Playwright browsers
 .playwright/
 
-# spaCy models (can be large)
-models/
+# spaCy downloaded binary models (can be large, downloaded at runtime)
+# NOTE: models/ is a Python package and must NOT be ignored
 *.spacy
+de_core_news_sm/
+en_core_web_sm/
+de_core_news_lg/
 
 # Keep example files
 !.env.example
