@@ -16,7 +16,6 @@ from scrapers.remoteok import RemoteOKScraper
 from scrapers.weworkremotely import WeWorkRemotelyScraper
 from scrapers.hackernews import HackerNewsScraper
 from scrapers.adzuna import AdzunaScraper
-from scrapers.indeed import IndeedScraper
 from scrapers.stepstone import StepStoneScraper
 from scrapers.xing import XINGScraper
 from extractors.tech_extractor import TechStackExtractor
@@ -38,7 +37,6 @@ class JobFinderPipeline:
         'weworkremotely': WeWorkRemotelyScraper,
         'hackernews': HackerNewsScraper,
         'adzuna': AdzunaScraper,
-        'indeed': IndeedScraper,
         'stepstone': StepStoneScraper,
         'xing': XINGScraper,
     }

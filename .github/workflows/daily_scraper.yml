@@ -15,7 +15,7 @@ on:
       scrapers:
         description: 'Comma-separated scraper names (e.g. remoteok,weworkremotely,hackernews,stepstone,xing)'
         required: false
-        default: 'remoteok,weworkremotely,hackernews,stepstone,xing'
+        default: 'remoteok,weworkremotely,hackernews'
 
 jobs:
   scrape-jobs:

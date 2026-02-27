@@ -90,7 +90,7 @@ preferences:
     - "Stuttgart"
     - "Düsseldorf"
   
-  min_score: 30  # Realistic threshold: German jobs score 25-55 (TF-IDF near 0 for cross-language matching)
+  min_score: 36  # Realistic threshold: German jobs score 25-55 (TF-IDF near 0 for cross-language matching)
 
 # Profile text for TF-IDF matching
 # Natural language summary of skills and experience
