@@ -2,9 +2,11 @@
 
 import asyncio
 import argparse
+import json
 import sys
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
+from pathlib import Path
 
 # Ensure project root is in sys.path (needed for GitHub Actions / non-installed runs)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -228,6 +230,34 @@ class JobFinderPipeline:
         
         return jobs
     
+    def _load_seen_urls(self, max_age_days: int = 30) -> set:
+        """Load previously exported job URLs (for cross-run deduplication)."""
+        seen_file = Path("cache/seen_jobs.json")
+        if not seen_file.exists():
+            return set()
+        try:
+            data = json.loads(seen_file.read_text(encoding='utf-8'))
+            cutoff = (datetime.now() - timedelta(days=max_age_days)).isoformat()
+            return {url for url, ts in data.items() if ts > cutoff}
+        except Exception:
+            return set()
+
+    def _save_seen_urls(self, jobs: List[Job]) -> None:
+        """Persist exported job URLs so they are skipped in future runs."""
+        seen_file = Path("cache/seen_jobs.json")
+        try:
+            data: dict = {}
+            if seen_file.exists():
+                data = json.loads(seen_file.read_text(encoding='utf-8'))
+            now = datetime.now().isoformat()
+            for job in jobs:
+                if job.url:
+                    data[str(job.url)] = now
+            seen_file.write_text(json.dumps(data, indent=2), encoding='utf-8')
+            self.logger.info(f"Saved {len(jobs)} exported URLs ({len(data)} total in seen_jobs.json)")
+        except Exception as e:
+            self.logger.warning(f"Could not save seen URLs: {e}")
+
     def _get_top_jobs(self, jobs: List[Job], top_n: int) -> List[Job]:
         """Get top N jobs by score with Remote priority."""
         # Filter by minimum score from profile
@@ -238,6 +268,15 @@ class JobFinderPipeline:
             job for job in jobs
             if hasattr(job, 'score_result') and job.score_result.score >= min_score
         ]
+
+        # Skip already-exported jobs (cross-run deduplication)
+        seen_urls = self._load_seen_urls()
+        if seen_urls:
+            before = len(scored_jobs)
+            scored_jobs = [j for j in scored_jobs if str(j.url) not in seen_urls]
+            skipped = before - len(scored_jobs)
+            if skipped:
+                self.logger.info(f"Skipped {skipped} already-exported jobs (seen in last 30 days)")
         
         # Define remote priority (higher = better)
         def get_remote_priority(job: Job) -> int:
@@ -352,7 +391,17 @@ async def main():
         action='store_true',
         help='Export results to Google Sheets'
     )
-    
+
+    parser.add_argument(
+        '--append-sheets',
+        action='store_true',
+        help=(
+            'Append rows to existing sheet instead of overwriting. '
+            'Used by local DE runner (StepStone/XING) to add results '
+            'to the same sheet already written by GitHub Actions.'
+        )
+    )
+
     parser.add_argument(
         '--sheets-name',
         type=str,
@@ -425,11 +474,16 @@ async def main():
                         for job in top_jobs
                     }
                     
-                    # Write to sheets
-                    success = writer.write_jobs(top_jobs, scores_dict)
+                    # Write to sheets (append mode for local DE runner)
+                    success = writer.write_jobs(
+                        top_jobs,
+                        scores_dict,
+                        append_mode=args.append_sheets
+                    )
                     
                     if success:
                         print("✅ Jobs exported to Google Sheets successfully!")
+                        pipeline._save_seen_urls(top_jobs)
                     else:
                         print("❌ Failed to export jobs to Google Sheets.")
                         print("   Check logs for details.")
