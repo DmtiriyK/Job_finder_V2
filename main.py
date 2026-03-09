@@ -230,7 +230,7 @@ class JobFinderPipeline:
         
         return jobs
     
-    def _load_seen_urls(self, max_age_days: int = 30) -> set:
+    def _load_seen_urls(self, max_age_days: int = 7) -> set:
         """Load previously exported job URLs (for cross-run deduplication)."""
         seen_file = Path("cache/seen_jobs.json")
         if not seen_file.exists():
